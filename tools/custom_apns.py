@@ -23,12 +23,11 @@ def main(argv):
     sys.setdefaultencoding('utf8')
     original_file = 'vendor/lineage/prebuilt/common/etc/apns-conf.xml'
 
-    if len(argv) == 3:
-        output_file_path = argv[1]
-        custom_override_file = argv[2]
-    else:
-        raise ValueError("Wrong number of arguments %s" % len(argv))
+    if len(argv) != 3:
+        raise ValueError(f"Wrong number of arguments {len(argv)}")
 
+    output_file_path = argv[1]
+    custom_override_file = argv[2]
     custom_apn_names = []
     with open(custom_override_file, 'r') as f:
         for line in f:
@@ -49,13 +48,12 @@ def main(argv):
                                     writeOriginalLine = False
                                     custom_apn_names.remove(apn)
                 if writeOriginalLine:
-                    if "</apns>" in line:
-                        if custom_apn_names:
-                            for apn in custom_apn_names:
-                                with open(custom_override_file, 'r') as custom_file:
-                                    for override_line in custom_file:
-                                        if apn in override_line:
-                                            output_file.write(override_line)
+                    if "</apns>" in line and custom_apn_names:
+                        for apn in custom_apn_names:
+                            with open(custom_override_file, 'r') as custom_file:
+                                for override_line in custom_file:
+                                    if apn in override_line:
+                                        output_file.write(override_line)
                     output_file.write(line)
 
 if __name__ == '__main__':
