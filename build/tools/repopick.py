@@ -56,8 +56,8 @@ def cmp(a, b):
 
 # Verifies whether pathA is a subdirectory (or the same) as pathB
 def is_subdir(a, b):
-    a = os.path.realpath(a) + '/'
-    b = os.path.realpath(b) + '/'
+    a = f'{os.path.realpath(a)}/'
+    b = f'{os.path.realpath(b)}/'
     return b == a[:len(b)]
 
 
@@ -144,9 +144,9 @@ def fetch_query_via_http(remote_url, query):
 
 def fetch_query(remote_url, query):
     """Wrapper for fetch_query_via_proto functions"""
-    if remote_url[0:3] == 'ssh':
+    if remote_url[:3] == 'ssh':
         return fetch_query_via_ssh(remote_url, query)
-    elif remote_url[0:4] == 'http':
+    elif remote_url[:4] == 'http':
         return fetch_query_via_http(remote_url, query.replace(' ', '+'))
     else:
         raise Exception('Gerrit URL should be in the form http[s]://hostname/ or ssh://[user@]host[:port]')
